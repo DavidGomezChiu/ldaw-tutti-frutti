@@ -17,7 +17,7 @@ const App = () => {
     return (
         <div className="App">
             <BrowserRouter>
-                <div>
+                <div className="app-container">
                     <Header></Header>
                     <Switch>
                         <Route path="/" exact component={CharacterSelection}></Route>

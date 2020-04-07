@@ -8,7 +8,7 @@ import Col from 'react-bootstrap/Col';
 export class CharacterSelection extends Component {
     render() {
         return (
-            <div>
+            <div className="content">
                 <Container>
                     <Row className="justify-content-center">
                         <Col>

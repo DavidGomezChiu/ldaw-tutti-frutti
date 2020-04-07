@@ -1,1 +1,7 @@
 @import "~bootstrap/scss/bootstrap.scss";
+.App{
+    min-height: 100vh;
+    .app-container{
+        min-height: 100vh;
+    }
+}

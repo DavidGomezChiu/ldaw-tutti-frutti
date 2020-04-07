@@ -1,7 +1,11 @@
 .card{
     text-align: center;
-    max-width: 50vw;
+    max-width: 45vw;
     .animal-icon{
         max-width: 80px;
+        margin: 0 2%;
+    }
+    .animal-icon:hover{
+        border: 1px solid blue;
     }
 }
