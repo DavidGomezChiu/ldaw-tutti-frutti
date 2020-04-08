@@ -56,18 +56,17 @@ app.use('/', express.static(__dirname + '/public'));
 // Routes
 app.use('/', webRoutes);
 
+const { v4: uuidv4 } = require('uuid');
 io.on('connection', (socket) => {
-  console.log('Client connected');
+  console.log('Client '+socket.id+' connected');
 
-  let i = 0;
+  socket.on('select-animal', (animal,callback) => {
+    console.log('animal-selected: '+animal);
+    callback(uuidv4());
+  })
 
-  setInterval(() => {
-    socket.emit('toast',{message: 'Mensaje '+i})
-    i++;
-  },1000);
-
-  socket.on('message-to-server', (data) => {
-    console.log('message received: '+data);
+  socket.on('disconnect', () => {
+    console.log('Socket '+socket.id+' disconnected');
   })
 })
 
