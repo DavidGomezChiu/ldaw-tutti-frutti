@@ -57,16 +57,24 @@ app.use('/', express.static(__dirname + '/public'));
 app.use('/', webRoutes);
 
 const { v4: uuidv4 } = require('uuid');
+let connectedClients = 0;
 io.on('connection', (socket) => {
   console.log('Client '+socket.id+' connected');
+  connectedClients++;
+  console.log('Total clients: '+connectedClients);
+
+  io.sockets.emit('connected-clients',connectedClients);
 
   socket.on('select-animal', (animal,callback) => {
     console.log('animal-selected: '+animal);
-    callback(uuidv4());
+    callback(uuidv4(),{connectedClients:connectedClients});
   })
 
   socket.on('disconnect', () => {
     console.log('Socket '+socket.id+' disconnected');
+    connectedClients--;
+    console.log('Total clients: '+connectedClients);
+    io.sockets.emit('connected-clients',connectedClients);
   })
 })
 
