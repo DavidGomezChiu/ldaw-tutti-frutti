@@ -8,14 +8,20 @@ export class WaitingRoom extends Component {
     }
 
     componentDidMount(){
-        this.props.socket.on('connected-clients',(connectedClients) => {
-            this.setState(
-                {
-                    connectedClients:connectedClients
-                },
-                () => {
-                    this.determineMessage();
-                });
+        this.setState({
+            connectedClients: this.props.initialConnectedClients
+        }, () => {
+            this.determineMessage();
+            this.props.socket.on('connected-clients',(connectedClients) => {
+                this.setState(
+                    {
+                        connectedClients:connectedClients
+                    },
+                    () => {
+                        this.determineMessage();
+                    }
+                );
+            });
         });
     }
 

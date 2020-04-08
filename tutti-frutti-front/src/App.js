@@ -59,7 +59,7 @@ export class App extends Component {
                             <Route path="/" exact render={props => { return <CharacterSelection {...props} socket={this.socket} setToken={this.setToken} getToken={this.getToken} setConnectedClients={this.setConnectedClients}></CharacterSelection> }}></Route>
                             <Route path="/game" exact component={Game}></Route>
                             <Route path="/result" exact component={Result}></Route>
-                            <Route path="/wait" exact render={props => { return <WaitingRoom {...props} socket={this.socket} getConnectedClients={this.getConnectedClients}></WaitingRoom> }}></Route>
+                            <Route path="/wait" exact render={props => { return <WaitingRoom {...props} socket={this.socket} initialConnectedClients={this.state.connectedClients} getConnectedClients={this.getConnectedClients}></WaitingRoom> }}></Route>
                             <Route component={Error404}></Route>
                         </Switch>
                         <Footer></Footer>
