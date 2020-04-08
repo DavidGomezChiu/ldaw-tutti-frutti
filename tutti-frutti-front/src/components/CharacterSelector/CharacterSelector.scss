@@ -3,6 +3,9 @@
     max-width: 45vw;
     .animal-icon{
         max-width: 80px;
+        max-height: 80px;
+        min-width: 50px;
+        min-height: 50px;
         margin: 0 2%;
     }
     .animal-icon:hover{
