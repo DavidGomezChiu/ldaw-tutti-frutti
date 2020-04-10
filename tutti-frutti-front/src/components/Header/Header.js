@@ -25,7 +25,7 @@ export class Header extends Component {
 
     render() {
         return (
-            <div>
+            <div className="header">
                 <Navbar collapseOnSelect expand="lg" className="bg-info" variant="dark">
                     <Navbar.Brand><Link to='/'>Tutti-Frutti</Link></Navbar.Brand>
                     <Navbar.Brand className="justify-content-end">

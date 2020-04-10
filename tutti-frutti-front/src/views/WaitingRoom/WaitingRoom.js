@@ -7,26 +7,35 @@ export class WaitingRoom extends Component {
         connectedClients: 0
     }
 
+    _isMounted = false;
+
     componentDidMount(){
+        this._isMounted = true;
         this.setState({
             connectedClients: this.props.initialConnectedClients
         }, () => {
             this.determineMessage();
             this.props.socket.on('connected-clients',(connectedClients) => {
-                this.setState(
-                    {
-                        connectedClients:connectedClients
-                    },
-                    () => {
-                        this.determineMessage();
-                    }
-                );
+                if(this._isMounted){
+                    this.setState(
+                        {
+                            connectedClients:connectedClients
+                        },
+                        () => {
+                            this.determineMessage();
+                        }
+                    );
+                }
             });
         });
     }
 
     componentDidUpdate(){
         console.log(this.state);
+    }
+
+    componentWillUnmount(){
+        this._isMounted = false;
     }
 
     determineMessage(){
