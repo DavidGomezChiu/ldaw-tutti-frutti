@@ -86,7 +86,7 @@ export class App extends Component {
                         <Switch>
                             <Route path="/" exact render={props => { return <CharacterSelection {...props} socket={this.socket} setToken={this.setToken} getToken={this.getToken} removeToken={this.removeToken} setConnectedClients={this.setConnectedClients}></CharacterSelection> }}></Route>
                             {this.hasToken() ?
-                                <Route path="/game" exact component={Game}></Route>
+                                <Route path="/game" exact render={props => { return <Game {...props} socket={this.socket}></Game> }}></Route>
                                 :
                                 <Redirect to='/'></Redirect>
                             }
