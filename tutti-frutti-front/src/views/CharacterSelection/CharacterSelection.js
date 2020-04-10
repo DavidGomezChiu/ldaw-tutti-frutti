@@ -23,6 +23,10 @@ export class CharacterSelection extends Component {
         });
     }
 
+    componentDidMount(){
+        this.props.socket.emit('player-inactive');
+    }
+
     render() {
         return (
             <div className="content">

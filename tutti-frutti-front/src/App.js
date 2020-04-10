@@ -69,6 +69,7 @@ export class App extends Component {
     }
 
     componentDidMount(){
+        console.log('mount');
         this.removeToken();
         this.socket.on('remove-data', (message) => {
             this.removeToken();

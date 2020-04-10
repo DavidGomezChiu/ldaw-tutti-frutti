@@ -75,8 +75,6 @@ io.on('connection', (socket) => {
   connectedClients++;
   //console.log('Total clients: '+connectedClients);
 
-  var socketId = socket.id;
-
   // Get active players
   if(io.sockets.adapter.rooms['active-players']){
     activePlayers = io.sockets.adapter.rooms['active-players'].length;
@@ -98,8 +96,26 @@ io.on('connection', (socket) => {
     callback(token,{connectedClients:activePlayers});
   })
 
+  socket.on('game-in-progress', (callback) => {
+    callback(gameInProgress);
+  });
+
   socket.on('player-inactive', () => {
-    activePlayers--;
+    if(io.sockets.adapter.sids[socket.id]['active-players']){
+      socket.leave('active-players');
+      activePlayers--;
+      io.sockets.emit('connected-clients',activePlayers);
+    }
+  });
+
+  socket.on('players-ready',(callback) => {
+    gameInProgress = true;
+    callback();
+  });
+  
+  socket.on('end-game',(ready) => {
+    gameInProgress = false;
+    socket.emit('game-has-finished',!gameInProgress);
   });
 
   // Socket disconnecting
@@ -108,10 +124,10 @@ io.on('connection', (socket) => {
       activePlayers--;
     }
   });
-  
+
   // Socket disconnected
   socket.on('disconnect', () => {
-    io.emit('remove-data','adiós');
+    socket.emit('remove-data','adiós');
 
     // console.log('Socket '+socket.id+' disconnected');
     connectedClients--;
