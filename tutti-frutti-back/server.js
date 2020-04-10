@@ -56,27 +56,73 @@ app.use('/', express.static(__dirname + '/public'));
 // Routes
 app.use('/', webRoutes);
 
+/**
+ * SOCKETS BEGIN
+ */
+
 const { v4: uuidv4 } = require('uuid');
 let connectedClients = 0;
+let activePlayers = 0;
+let gameInProgress = false;
+let sockets = [];
+
+// Find if socket is in room 'active-players'
+// io.sockets.adapter.sids[socket.id]['active-players']
+
 io.on('connection', (socket) => {
-  console.log('Client '+socket.id+' connected');
+  // Count clients
+  //console.log('Client '+socket.id+' connected');
   connectedClients++;
-  console.log('Total clients: '+connectedClients);
+  //console.log('Total clients: '+connectedClients);
 
-  io.sockets.emit('connected-clients',connectedClients);
+  var socketId = socket.id;
 
+  // Get active players
+  if(io.sockets.adapter.rooms['active-players']){
+    activePlayers = io.sockets.adapter.rooms['active-players'].length;
+  }else{
+    activePlayers = 0;
+  }
+
+  // Set active players on socket
+  socket.emit('connected-clients',activePlayers);
+
+  // Animal selection trigger
   socket.on('select-animal', (animal,callback) => {
-    console.log('animal-selected: '+animal);
-    callback(uuidv4(),{connectedClients:connectedClients});
+    if(!io.sockets.adapter.sids[socket.id]['active-players']){
+      activePlayers++;
+      socket.join('active-players');
+    }
+    let token = uuidv4();
+    io.sockets.emit('connected-clients',activePlayers);
+    callback(token,{connectedClients:activePlayers});
   })
 
+  socket.on('player-inactive', () => {
+    activePlayers--;
+  });
+
+  // Socket disconnecting
+  socket.on('disconnecting', () => {
+    if(io.sockets.adapter.sids[socket.id]['active-players']){
+      activePlayers--;
+    }
+  });
+  
+  // Socket disconnected
   socket.on('disconnect', () => {
-    console.log('Socket '+socket.id+' disconnected');
+    io.emit('remove-data','adiós');
+
+    // console.log('Socket '+socket.id+' disconnected');
     connectedClients--;
-    console.log('Total clients: '+connectedClients);
-    io.sockets.emit('connected-clients',connectedClients);
+
+    io.sockets.emit('connected-clients',activePlayers);
   })
-})
+});
+
+/**
+ * SOCKETS END
+ */
 
 // App init
 server.listen(appConfig.expressPort, () => {

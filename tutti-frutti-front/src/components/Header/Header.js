@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Link, withRouter, useLocation} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import './Header.scss';
 import Navbar from 'react-bootstrap/Navbar';
 
@@ -21,9 +21,6 @@ export class Header extends Component {
             this.setConnectedClients(connectedClients);
             this.props.setConnectedClients(connectedClients)
         });
-    }
-
-    componentDidUpdate(){
     }
 
     render() {

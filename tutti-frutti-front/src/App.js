@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 import './App.scss';
 import socketIOClient from 'socket.io-client';
 
@@ -32,9 +32,28 @@ export class App extends Component {
                 token: token
             },
             () => {
-                localStorage.setItem('token',this.state.token);
+                sessionStorage.setItem('token',this.state.token);
             }
         );
+    }
+
+    removeToken = () => {
+        this.setState(
+            {
+                token: ''
+            },
+            () => {
+                sessionStorage.removeItem('token');
+            }
+        );
+    }
+
+    hasToken = () => {
+        if(this.state.token === '' || !this.state.token){
+            return false;
+        }else{
+            return true;
+        }
     }
     
     getConnectedClients = () => {
@@ -49,6 +68,14 @@ export class App extends Component {
         );
     }
 
+    componentDidMount(){
+        this.removeToken();
+        this.socket.on('remove-data', (message) => {
+            this.removeToken();
+            console.log(message);
+        });
+    }
+
     render() {
         return (
             <div className="App">
@@ -56,10 +83,22 @@ export class App extends Component {
                     <div className="app-container">
                         <Header socket={this.socket} setConnectedClients={this.setConnectedClients}></Header>
                         <Switch>
-                            <Route path="/" exact render={props => { return <CharacterSelection {...props} socket={this.socket} setToken={this.setToken} getToken={this.getToken} setConnectedClients={this.setConnectedClients}></CharacterSelection> }}></Route>
-                            <Route path="/game" exact component={Game}></Route>
-                            <Route path="/result" exact component={Result}></Route>
-                            <Route path="/wait" exact render={props => { return <WaitingRoom {...props} socket={this.socket} initialConnectedClients={this.state.connectedClients} getConnectedClients={this.getConnectedClients}></WaitingRoom> }}></Route>
+                            <Route path="/" exact render={props => { return <CharacterSelection {...props} socket={this.socket} setToken={this.setToken} getToken={this.getToken} removeToken={this.removeToken} setConnectedClients={this.setConnectedClients}></CharacterSelection> }}></Route>
+                            {this.hasToken() ?
+                                <Route path="/game" exact component={Game}></Route>
+                                :
+                                <Redirect to='/'></Redirect>
+                            }
+                            {this.hasToken() ?
+                                <Route path="/result" exact component={Result}></Route>
+                                :
+                                <Redirect to='/'></Redirect>
+                            }
+                            {this.hasToken() ?
+                                <Route path="/wait" exact render={props => { return <WaitingRoom {...props} socket={this.socket} initialConnectedClients={this.state.connectedClients} getConnectedClients={this.getConnectedClients}></WaitingRoom> }}></Route>
+                                :
+                                <Redirect to='/'></Redirect>
+                            }
                             <Route component={Error404}></Route>
                         </Switch>
                         <Footer></Footer>

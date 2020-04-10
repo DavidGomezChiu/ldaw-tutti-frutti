@@ -10,7 +10,7 @@ export class CharacterSelection extends Component {
 
     chooseAnimal(animal){
         this.props.setToken('');
-        localStorage.removeItem('token');
+        this.props.removeToken();
         this.props.socket.emit('select-animal',animal, (token, response) => {
             this.token = token;
             console.log(this.token);
