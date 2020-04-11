@@ -15,6 +15,7 @@ export class WaitingRoom extends Component {
             connectedClients: this.props.initialConnectedClients
         }, () => {
             this.determineMessage();
+            this.props.socket.removeAllListeners('game-has-finished');
             this.props.socket.emit('player-waiting',this.props.getToken());
             this.props.socket.on('connected-clients',(connectedClients) => {
                 if(this._isMounted){

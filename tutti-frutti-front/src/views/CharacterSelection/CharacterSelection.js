@@ -12,6 +12,7 @@ export class CharacterSelection extends Component {
         this.props.setToken('');
         this.props.removeToken();
         this.props.socket.emit('select-animal',animal, (token, response) => {
+            sessionStorage.setItem('animal',animal);
             this.token = token;
             console.log(this.token);
             this.props.setToken(this.token);
@@ -24,6 +25,7 @@ export class CharacterSelection extends Component {
     }
 
     componentDidMount(){
+        sessionStorage.removeItem('animal');
         this.props.socket.emit('player-inactive');
     }
 

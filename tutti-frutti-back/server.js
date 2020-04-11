@@ -129,6 +129,12 @@ io.on('connection', (socket) => {
   });
   
   socket.on('end-game',(ready) => {
+    //io.sockets.clients('gaming-players').foreach(s => {
+    //  s.leave('gaming-players')
+    //});
+    if(io.sockets.adapter.rooms['gaming-players']){
+      socket.leave('gaming-players');
+    }
     io.sockets.emit('game-has-finished',true);
     gameInProgress = false;
     console.log('game has finished');

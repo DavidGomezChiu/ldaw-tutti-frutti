@@ -19,7 +19,8 @@ export class App extends Component {
 
     state = {
         token: '',
-        connectedClients: 0
+        connectedClients: 0,
+        animal: ''
     };
 
     getToken = () => {
