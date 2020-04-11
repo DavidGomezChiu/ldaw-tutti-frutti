@@ -56,7 +56,9 @@ export class WaitingRoom extends Component {
                                 message: 'Juego en progreso'
                             },
                             () => {
+                                console.log('esperando a que avisen');
                                 this.props.socket.on('game-has-finished', (gameHasFinished) => {
+                                    console.log('ya me avisaron');
                                     this.goToGame();
                                 });
                             }

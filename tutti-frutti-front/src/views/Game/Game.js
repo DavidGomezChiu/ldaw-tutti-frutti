@@ -2,17 +2,17 @@ import React, { Component } from 'react'
 
 export class Game extends Component {
 
-    endGame = () => {
-        this.props.history.push('/wait');
+    endGame = async () => {
+        await this.props.history.push('/wait');
         setTimeout(() => {
             this.props.socket.emit('end-game',true);
         },3000)
     }
 
     componentDidMount(){
-        setTimeout(() => {
+        setTimeout(async () => {
             console.log('terminando el juego');
-            this.endGame();
+            await this.endGame();
         },10000);
     }
 

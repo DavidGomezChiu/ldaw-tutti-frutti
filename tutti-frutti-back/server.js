@@ -122,15 +122,17 @@ io.on('connection', (socket) => {
     if(!io.sockets.adapter.rooms['waiting-room']){
       setTimeout(() => {
         gameInProgress = true;
+        console.log('gameInProgress: '+gameInProgress);
         console.log('game started');
       },1000);
     }
   });
   
   socket.on('end-game',(ready) => {
-    console.log('game has finished over');
+    io.sockets.emit('game-has-finished',true);
     gameInProgress = false;
-    socket.emit('game-has-finished',!gameInProgress);
+    console.log('game has finished');
+    console.log('gameInProgress: '+gameInProgress);
   });
 
   // Socket disconnecting

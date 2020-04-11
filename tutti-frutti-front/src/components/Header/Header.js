@@ -27,7 +27,7 @@ export class Header extends Component {
         return (
             <div className="header">
                 <Navbar collapseOnSelect expand="lg" className="bg-info" variant="dark">
-                    <Navbar.Brand><Link to='/'>Tutti-Frutti</Link></Navbar.Brand>
+                    <Navbar.Brand><Link to='/' onClick={this.props.removeToken}>Tutti-Frutti</Link></Navbar.Brand>
                     <Navbar.Brand className="justify-content-end">
                         Jugadores activos: {this.state.connectedClients}
                     </Navbar.Brand>

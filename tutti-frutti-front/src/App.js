@@ -82,7 +82,7 @@ export class App extends Component {
             <div className="App">
                 <BrowserRouter>
                     <div className="app-container">
-                        <Header socket={this.socket} setConnectedClients={this.setConnectedClients}></Header>
+                        <Header removeToken={this.removeToken} socket={this.socket} setConnectedClients={this.setConnectedClients}></Header>
                         <Switch>
                             <Route path="/" exact render={props => { return <CharacterSelection {...props} socket={this.socket} setToken={this.setToken} getToken={this.getToken} removeToken={this.removeToken} setConnectedClients={this.setConnectedClients}></CharacterSelection> }}></Route>
                             {this.hasToken() ?
