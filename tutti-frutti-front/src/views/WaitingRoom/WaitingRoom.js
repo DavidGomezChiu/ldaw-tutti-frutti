@@ -15,6 +15,7 @@ export class WaitingRoom extends Component {
             connectedClients: this.props.initialConnectedClients
         }, () => {
             this.determineMessage();
+            this.props.socket.emit('player-waiting',this.props.getToken());
             this.props.socket.on('connected-clients',(connectedClients) => {
                 if(this._isMounted){
                     this.setState(
@@ -39,34 +40,36 @@ export class WaitingRoom extends Component {
     }
 
     determineMessage(){
-        if(this.state.connectedClients < 2){
-            console.log('menos de dos jugadores');
-            this.setState({message: 'Esperando más jugadores'});
-        }else{
-            console.log('más de dos jugadores');
-            this.props.socket.emit('game-in-progress', (gameInProgress) => {
-                console.log('game in progress: '+gameInProgress);
-                if(!gameInProgress){
-                    this.goToGame();
-                }else{
-                    this.setState(
-                        {
-                            message: 'Juego en progreso'
-                        },
-                        () => {
-                            this.props.socket.on('game-has-finished', (gameHasFinished) => {
-                                this.goToGame();
-                            });
-                        }
-                    );
-                }
-            });
+        if(this._isMounted){
+            if(this.state.connectedClients < 2){
+                console.log('menos de dos jugadores');
+                this.setState({message: 'Esperando más jugadores'});
+            }else{
+                console.log('más de dos jugadores');
+                this.props.socket.emit('game-in-progress', (gameInProgress) => {
+                    console.log('game in progress: '+gameInProgress);
+                    if(!gameInProgress){
+                        this.goToGame();
+                    }else{
+                        this.setState(
+                            {
+                                message: 'Juego en progreso'
+                            },
+                            () => {
+                                this.props.socket.on('game-has-finished', (gameHasFinished) => {
+                                    this.goToGame();
+                                });
+                            }
+                        );
+                    }
+                });
+            }
         }
     }
 
     goToGame(){
         this.setState({message: 'Listo!'});
-        this.props.socket.emit('players-ready', () => {
+        this.props.socket.emit('player-ready', () => {
             this.props.history.push('/game');
         });
     }

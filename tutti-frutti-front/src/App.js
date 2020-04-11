@@ -96,7 +96,7 @@ export class App extends Component {
                                 <Redirect to='/'></Redirect>
                             }
                             {this.hasToken() ?
-                                <Route path="/wait" exact render={props => { return <WaitingRoom {...props} socket={this.socket} initialConnectedClients={this.state.connectedClients} getConnectedClients={this.getConnectedClients}></WaitingRoom> }}></Route>
+                                <Route path="/wait" exact render={props => { return <WaitingRoom {...props} socket={this.socket} getToken={this.getToken} initialConnectedClients={this.state.connectedClients} getConnectedClients={this.getConnectedClients}></WaitingRoom> }}></Route>
                                 :
                                 <Redirect to='/'></Redirect>
                             }

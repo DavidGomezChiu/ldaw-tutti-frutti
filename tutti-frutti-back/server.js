@@ -96,6 +96,13 @@ io.on('connection', (socket) => {
     callback(token,{connectedClients:activePlayers});
   })
 
+  socket.on('player-waiting', token => {
+    socket.join('waiting-room');
+    //if(io.sockets.adapter.rooms['waiting-room']){
+    //  console.log('hay '+io.sockets.adapter.rooms['waiting-room'].length+' jugadores esperando');
+    //}
+  });
+
   socket.on('game-in-progress', (callback) => {
     callback(gameInProgress);
   });
@@ -108,12 +115,20 @@ io.on('connection', (socket) => {
     }
   });
 
-  socket.on('players-ready',(callback) => {
-    gameInProgress = true;
+  socket.on('player-ready',(callback) => {
+    socket.leave('waiting-room');
+    socket.join('gaming-players');
     callback();
+    if(!io.sockets.adapter.rooms['waiting-room']){
+      setTimeout(() => {
+        gameInProgress = true;
+        console.log('game started');
+      },1000);
+    }
   });
   
   socket.on('end-game',(ready) => {
+    console.log('game has finished over');
     gameInProgress = false;
     socket.emit('game-has-finished',!gameInProgress);
   });
