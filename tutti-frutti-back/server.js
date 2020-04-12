@@ -65,6 +65,8 @@ let connectedClients = 0;
 let activePlayers = 0;
 let gameInProgress = false;
 let sockets = [];
+let letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+let randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
 
 // Find if socket is in room 'active-players'
 // io.sockets.adapter.sids[socket.id]['active-players']
@@ -116,6 +118,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('player-ready',(callback) => {
+    randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
     socket.leave('waiting-room');
     socket.join('gaming-players');
     callback();
@@ -126,6 +129,10 @@ io.on('connection', (socket) => {
         console.log('game started');
       },1000);
     }
+  });
+
+  socket.on('create-letter',(callback) => {
+    callback(randomLetter);
   });
   
   socket.on('end-game',(ready) => {
