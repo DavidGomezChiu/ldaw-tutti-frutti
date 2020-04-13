@@ -8,7 +8,9 @@ export class Game extends Component {
     state = {
         name: '',
         color: '',
-        fruit: ''
+        fruit: '',
+        number: 0,
+        ending: false
     }
 
     setValues = (field,value) => {
@@ -30,27 +32,35 @@ export class Game extends Component {
     }
 
     endGame = async () => {
-        await this.props.history.push('/wait');
-        setTimeout(() => {
-            this.props.socket.emit('end-game',true);
-        },3000)
+        this.props.socket.emit('end-game',true);
     }
 
     componentDidMount(){
-        /*
-        setTimeout(async () => {
-            console.log('terminando el juego');
-            await this.endGame();
-        },10000);
-        */
+        this.props.socket.on('countdown', (number) => {
+            this.setState({
+                number: number,
+                ending: true
+            },
+            () => {
+                console.log(this.state.number);
+                if(this.state.number == 0){
+                    this.props.socket.emit('grade-me', this.state.name, this.state.color, this.state.fruit, (grade) => {
+                        console.log('Mi calificación es: '+grade);
+                    });
+                }
+            });
+        });
+        this.props.socket.on('game-ended', () => {
+            this.props.history.push('/wait');
+        });
     }
 
     render() {
         return (
             <div>
                 <ChosenLetter socket={this.props.socket}></ChosenLetter>
-                <Categories setValues={this.setValues}></Categories>
-                <EndButton></EndButton>
+                <Categories className="mb-4" setValues={this.setValues}></Categories>
+                <EndButton ending={this.state.ending} number={this.state.number} endGame={this.endGame}></EndButton>
             </div>
         )
     }

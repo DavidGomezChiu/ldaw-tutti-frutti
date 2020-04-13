@@ -59,8 +59,10 @@ export class WaitingRoom extends Component {
                             () => {
                                 console.log('esperando a que avisen');
                                 this.props.socket.on('game-has-finished', (gameHasFinished) => {
-                                    console.log('ya me avisaron');
-                                    this.goToGame();
+                                    this.setState({message: 'Listo!'});
+                                    this.props.socket.emit('done-waiting', () => {
+                                        this.props.history.push('/game');
+                                    });
                                 });
                             }
                         );

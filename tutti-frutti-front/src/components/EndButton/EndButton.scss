@@ -1,8 +1,5 @@
 .stop{
-    width: 15vw;
-    height: 15vw;
     border-radius: 50%;
-    line-height: 15vw;
     font-size: large;
     margin: 0 auto;
     text-align: center;
@@ -12,5 +9,19 @@
     box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.75);
     p{
         vertical-align: middle;
+    }
+}
+@media only screen and (max-width: 991px) {
+    .stop {
+        width: 30vw;
+        height: 30vw;
+        line-height: 30vw;
+    }
+}
+@media only screen and (min-width: 992px) {
+    .stop {
+        width: 15vw;
+        height: 15vw;
+        line-height: 15vw;
     }
 }

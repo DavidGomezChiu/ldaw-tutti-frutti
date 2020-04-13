@@ -3,6 +3,7 @@ import './Categories.scss';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form'
 
 export class Categories extends Component {
     state = {
@@ -35,21 +36,35 @@ export class Categories extends Component {
     render() {
         return (
             <div>
-                <Container>
-                    <Row>
-                        <Col className="mb-5">
-                            <h5>Nombre</h5>
-                            <input value={this.state.name} name="name" type="text" onChange={this.onInputChange.bind(this)}></input>
-                        </Col>
-                        <Col>
-                            <h5>Color</h5>
-                            <input value={this.state.color} name="color" type="text" onChange={this.onInputChange.bind(this)}></input>
-                        </Col>
-                        <Col>
-                            <h5>Fruta</h5>
-                            <input value={this.state.fruit} name="fruit" type="text" onChange={this.onInputChange.bind(this)}></input>
-                        </Col>
-                    </Row>
+                <Container className="mb-5">
+                    <Form>
+                        <Row>
+                            <Col xm={12} md={4}>
+                                <Form.Group>
+                                    <Form.Label>
+                                        <h5>Nombre</h5>
+                                    </Form.Label>
+                                    <Form.Control value={this.state.name} name="name" type="text" onChange={this.onInputChange.bind(this)}></Form.Control>
+                                </Form.Group>
+                            </Col>
+                            <Col xm={12} md={4}>
+                                <Form.Group>
+                                    <Form.Label>
+                                        <h5>Color</h5>
+                                    </Form.Label>
+                                    <Form.Control value={this.state.color} name="color" type="text" onChange={this.onInputChange.bind(this)}></Form.Control>
+                                </Form.Group>
+                            </Col>
+                            <Col xm={12} md={4}>
+                                <Form.Group>
+                                    <Form.Label>
+                                        <h5>Fruta</h5>
+                                    </Form.Label>
+                                    <Form.Control value={this.state.fruit} name="fruit" type="text" onChange={this.onInputChange.bind(this)}></Form.Control>
+                                </Form.Group>
+                            </Col>
+                        </Row>
+                    </Form>
                 </Container>
             </div>
         )

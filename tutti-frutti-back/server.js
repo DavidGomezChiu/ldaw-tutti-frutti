@@ -61,6 +61,7 @@ app.use('/', webRoutes);
  */
 
 const { v4: uuidv4 } = require('uuid');
+const peopleNames = require('people-names');
 let connectedClients = 0;
 let activePlayers = 0;
 let gameInProgress = false;
@@ -121,6 +122,20 @@ io.on('connection', (socket) => {
     randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
     socket.leave('waiting-room');
     socket.join('gaming-players');
+    if(!io.sockets.adapter.rooms['waiting-room']){
+      setTimeout(() => {
+        gameInProgress = true;
+        console.log('gameInProgress: '+gameInProgress);
+        console.log('game started');
+      },1000);
+    }
+    callback();
+  });
+  
+  socket.on('done-waiting',(callback) => {
+    console.log('someone was waiting');
+    socket.leave('waiting-room');
+    socket.join('gaming-players');
     callback();
     if(!io.sockets.adapter.rooms['waiting-room']){
       setTimeout(() => {
@@ -132,20 +147,49 @@ io.on('connection', (socket) => {
   });
 
   socket.on('create-letter',(callback) => {
-    callback(randomLetter);
+    setTimeout(() => {
+      callback(randomLetter);
+    },1000)
+  });
+
+  socket.on('grade-me', (name,color,fruit,callback) => {
+    var grade = 0;
+    console.log('Recibí:');
+    console.log(name);
+    console.log(color);
+    console.log(fruit);
+    callback(grade);
   });
   
   socket.on('end-game',(ready) => {
-    //io.sockets.clients('gaming-players').foreach(s => {
-    //  s.leave('gaming-players')
-    //});
-    if(io.sockets.adapter.rooms['gaming-players']){
-      socket.leave('gaming-players');
+    if(gameInProgress){
+      var countdown = 10;
+      var interval = setInterval(() => {
+        if(countdown >= 0){
+          io.sockets.in('gaming-players').emit('countdown',countdown);
+          console.log(countdown);
+          countdown--;
+        }else{
+          gameInProgress = false;
+          if(io.sockets.adapter.rooms['gaming-players']){
+            console.log(io.sockets.adapter.rooms['gaming-players']);
+          }
+          io.sockets.in('gaming-players').emit('game-ended');
+          if(io.sockets.adapter.rooms['gaming-players']){
+            io.of('/').in('gaming-players').clients((error, socketIds) => {
+              if (error) throw error;
+            
+              socketIds.forEach(socketId => io.sockets.sockets[socketId].leave('gaming-players'));
+            
+            });
+          }
+          io.sockets.emit('game-has-finished',true);
+          console.log('game has finished');
+          console.log('gameInProgress: '+gameInProgress);
+          clearInterval(interval);
+        }
+      },1000);
     }
-    io.sockets.emit('game-has-finished',true);
-    gameInProgress = false;
-    console.log('game has finished');
-    console.log('gameInProgress: '+gameInProgress);
   });
 
   // Socket disconnecting
