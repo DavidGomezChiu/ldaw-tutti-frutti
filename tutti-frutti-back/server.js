@@ -75,6 +75,8 @@ let responesNames = [];
 let responesColors = [];
 let responesFruits = [];
 
+let grades = [];
+
 let colors = [];
 
 namedColors.forEach(color => {
@@ -168,12 +170,13 @@ io.on('connection', (socket) => {
     responesNames = [];
     responesColors = [];
     responesFruits = [];
+    grades = [];
     setTimeout(() => {
       callback(randomLetter);
     },1000)
   });
 
-  socket.on('grade-me', (name,color,fruit,callback) => {
+  socket.on('grade-me', (name,color,fruit, token,callback) => {
     name = name.toUpperCase();
     color = color.toUpperCase();
     fruit = fruit.toUpperCase();
@@ -240,8 +243,24 @@ io.on('connection', (socket) => {
 
       }
     }
-    
+    grades.push({token:token, grade:grade});
     callback(grade);
+  });
+
+  socket.on('send-winners', callback => {
+    let winners = [];
+    let best = -1;
+    grades.forEach(player => {
+      if (player.grade > best){
+        best = player.grade;
+        winners.push(player.token);
+      }else{
+        if(player.grade == best){
+          winners.push(player.token)
+        }
+      }
+    });
+    callback(winners);
   });
   
   socket.on('end-game',(ready) => {
