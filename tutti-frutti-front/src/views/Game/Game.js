@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './Game.scss';
 import ChosenLetter from '../../components/ChosenLetter/ChosenLetter';
 import Categories from '../../components/Categories/Categories';
+import EndButton from '../../components/EndButton/EndButton';
 
 export class Game extends Component {
     state = {
@@ -49,6 +50,7 @@ export class Game extends Component {
             <div>
                 <ChosenLetter socket={this.props.socket}></ChosenLetter>
                 <Categories setValues={this.setValues}></Categories>
+                <EndButton></EndButton>
             </div>
         )
     }
