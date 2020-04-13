@@ -62,12 +62,30 @@ app.use('/', webRoutes);
 
 const { v4: uuidv4 } = require('uuid');
 const peopleNames = require('people-names');
+const namedColors = require('color-name-list');
+const fruitList = require('./public/data/fruits.json');
 let connectedClients = 0;
 let activePlayers = 0;
 let gameInProgress = false;
 let sockets = [];
 let letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 let randomLetter = letters.charAt(Math.floor(Math.random() * letters.length));
+
+let responesNames = [];
+let responesColors = [];
+let responesFruits = [];
+
+let colors = [];
+
+namedColors.forEach(color => {
+  colors.push(color.name.toUpperCase())
+});
+
+let fruits = [];
+
+fruitList.fruits.forEach(fruit => {
+  fruits.push(fruit.toUpperCase())
+});
 
 // Find if socket is in room 'active-players'
 // io.sockets.adapter.sids[socket.id]['active-players']
@@ -147,17 +165,82 @@ io.on('connection', (socket) => {
   });
 
   socket.on('create-letter',(callback) => {
+    responesNames = [];
+    responesColors = [];
+    responesFruits = [];
     setTimeout(() => {
       callback(randomLetter);
     },1000)
   });
 
   socket.on('grade-me', (name,color,fruit,callback) => {
+    name = name.toUpperCase();
+    color = color.toUpperCase();
+    fruit = fruit.toUpperCase();
+
+    responesNames.push(name);
+    responesColors.push(color);
+    responesFruits.push(fruit);
+
     var grade = 0;
-    console.log('Recibí:');
-    console.log(name);
-    console.log(color);
-    console.log(fruit);
+
+    if(name !== ''){
+      if(name[0] == randomLetter){
+
+        if(peopleNames.isPersonName(name)){
+
+          let count = 0;
+
+          responesNames.forEach(nameInArray => {
+            if(nameInArray == name){
+              count++;
+            }
+          });
+
+          count--;
+
+          grade += 10 - count;
+        }
+
+      }
+    }
+    if(color !== ''){
+      if(color[0] == randomLetter){
+        if(colors.includes(color)){
+
+          let count = 0;
+
+          responesColors.forEach(colorInArray => {
+            if(colorInArray == color){
+              count++;
+            }
+          });
+
+          count--;
+
+          grade += 10 - count;
+
+        }
+      }
+    }
+    if(fruit !== ''){
+      if(fruit[0] == randomLetter){
+        
+        let count = 0;
+
+        responesFruits.forEach(fruitInArray => {
+          if(fruitInArray == fruit){
+            count++;
+          }
+        });
+
+        count--;
+
+        grade += 10 - count;
+
+      }
+    }
+    
     callback(grade);
   });
   
