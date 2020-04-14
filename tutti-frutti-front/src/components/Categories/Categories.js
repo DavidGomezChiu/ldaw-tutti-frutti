@@ -42,7 +42,7 @@ export class Categories extends Component {
                             <Col xm={12} md={4}>
                                 <Form.Group>
                                     <Form.Label>
-                                        <h5>Nombre</h5>
+                                        <h5>Name</h5>
                                     </Form.Label>
                                     <Form.Control value={this.state.name} name="name" type="text" onChange={this.onInputChange.bind(this)}></Form.Control>
                                 </Form.Group>
@@ -58,7 +58,7 @@ export class Categories extends Component {
                             <Col xm={12} md={4}>
                                 <Form.Group>
                                     <Form.Label>
-                                        <h5>Fruta</h5>
+                                        <h5>Fruit</h5>
                                     </Form.Label>
                                     <Form.Control value={this.state.fruit} name="fruit" type="text" onChange={this.onInputChange.bind(this)}></Form.Control>
                                 </Form.Group>

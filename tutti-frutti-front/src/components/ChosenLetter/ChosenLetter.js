@@ -21,7 +21,7 @@ export class ChosenLetter extends Component {
     render() {
         return (
             <div className="mt-4">
-                <h3>Letra {this.state.letter === ''? '...' : this.state.letter}</h3>
+                <h3>Letter {this.state.letter === ''? '...' : this.state.letter}</h3>
             </div>
         )
     }

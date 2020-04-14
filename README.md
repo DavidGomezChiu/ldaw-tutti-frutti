@@ -4,11 +4,15 @@
 
 Este proyecto fue hecho en Node.js y React.js.
 
+## Instalar
+
 Para instalar las dependencias abre una consola en la carpeta principal y ejecuta este comando:
 
 ```
 cd tutti-frutti-back && npm install && cd ../tutti-frutti-front && npm install
 ```
+
+## Ejecutar
 
 Para correr el proyecto necesitas dos terminales abiertas en la carpeta principal del proyecto.
 

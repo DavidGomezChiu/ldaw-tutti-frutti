@@ -38,7 +38,7 @@ export class Header extends Component {
                     <Navbar.Brand><Link to='/' onClick={this.props.removeToken}>Tutti-Frutti</Link></Navbar.Brand>
                     <Navbar.Brand className="justify-content-end">
                         {this.setAnimal()}
-                        Jugadores activos: {this.state.connectedClients}
+                        Active players: {this.state.connectedClients}
                     </Navbar.Brand>
                 </Navbar>
             </div>

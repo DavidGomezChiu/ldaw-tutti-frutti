@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import './EndButton.scss';
-import Button from 'react-bootstrap/Button';
 
 export class EndButton extends Component {
     clicked = false;
 
     state = {
-        message: 'BASTA',
+        message: 'STOP',
         number: 0
     }
 
@@ -28,7 +27,7 @@ export class EndButton extends Component {
         return (
             <div>
                 <div onClick={this.endGame.bind(this)} className="stop">
-                    <p>{this.state.number == 0? 'BASTA' : this.state.number}</p>
+                    <p>{this.state.number == 0? 'STOP' : this.state.number}</p>
                 </div>
             </div>
         )

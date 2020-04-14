@@ -8,7 +8,7 @@ export class CharacterSelector extends Component {
             <div>
                 <Card className="card mx-auto">
                     <Card.Body>
-                        <Card.Title className="mb-3">Escoge un avatar</Card.Title>
+                        <Card.Title className="mb-3">Choose an avatar</Card.Title>
                         <img onClick={() => {this.props.onSelect('sloth')}} className="animal-icon" alt="Perezoso" src={process.env.PUBLIC_URL+'/assets/icons/sloth.svg'}/>
                         <img onClick={() => {this.props.onSelect('bear')}} className="animal-icon" alt="Oso" src={process.env.PUBLIC_URL+'/assets/icons/bear.svg'}/>
                         <img onClick={() => {this.props.onSelect('dog')}} className="animal-icon" alt="Perro" src={process.env.PUBLIC_URL+'/assets/icons/dog.svg'}/>

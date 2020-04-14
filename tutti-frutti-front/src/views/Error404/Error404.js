@@ -6,8 +6,8 @@ export class Error404 extends Component {
     render() {
         return (
             <div>
-                <h2>No encontramos lo que buscabas :/</h2>
-                <Link to={'/'}>Pero, ¿por qué no juegas basta? <span role="img" aria-label="wink">😉</span></Link>
+                <h2>We didn't found what you're looking for :/</h2>
+                <Link to={'/'}>Play some Tutti-Frutti? <span role="img" aria-label="wink">😉</span></Link>
             </div>
         )
     }
