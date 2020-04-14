@@ -42,12 +42,9 @@ export class Game extends Component {
                 ending: true
             },
             () => {
-                console.log(this.state.number);
                 if(this.state.number == 0){
                     this.props.socket.emit('grade-me', this.state.name, this.state.color, this.state.fruit, sessionStorage.getItem('token'), (grade) => {
-                        console.log('Mi calificación es: '+grade);
                         this.props.socket.emit('send-winners', winners => {
-                            console.log(winners);
                             var gameWon = false;
                             winners.forEach(winner => {
                                 if(winner.token == sessionStorage.getItem('token')){

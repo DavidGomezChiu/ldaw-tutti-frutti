@@ -1,12 +1,5 @@
 // Imports
 const express = require('express');
-const webRoutes = require('./routes/web');
-
-// Session imports
-let cookieParser = require('cookie-parser');
-let session = require('express-session');
-let flash = require('express-flash');
-let passport = require('passport');
 
 // Express app creation
 const app = express();
@@ -17,44 +10,6 @@ const io = require('socket.io')(server);
 
 // Configurations
 const appConfig = require('./configs/app');
-
-// View engine configs
-const exphbs = require('express-handlebars');
-const hbshelpers = require("handlebars-helpers");
-const multihelpers = hbshelpers();
-const extNameHbs = 'hbs';
-const hbs = exphbs.create({
-  extname: extNameHbs,
-  helpers: multihelpers
-});
-app.engine(extNameHbs, hbs.engine);
-app.set('view engine', extNameHbs);
-
-// Session configurations
-let sessionStore = new session.MemoryStore;
-app.use(cookieParser());
-app.use(session({
-  cookie: { maxAge: 60000 },
-  store: sessionStore,
-  saveUninitialized: true,
-  resave: 'true',
-  secret: appConfig.secret
-}));
-app.use(flash());
-
-// Configuraciones de passport
-require('./configs/passport');
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Receive parameters from the Form requests
-app.use(express.urlencoded({ extended: true }))
-
-// Static files
-app.use('/', express.static(__dirname + '/public'));
-
-// Routes
-app.use('/', webRoutes);
 
 /**
  * SOCKETS BEGIN
@@ -89,14 +44,8 @@ fruitList.fruits.forEach(fruit => {
   fruits.push(fruit.toUpperCase())
 });
 
-// Find if socket is in room 'active-players'
-// io.sockets.adapter.sids[socket.id]['active-players']
-
 io.on('connection', (socket) => {
-  // Count clients
-  //console.log('Client '+socket.id+' connected');
   connectedClients++;
-  //console.log('Total clients: '+connectedClients);
 
   // Get active players
   if(io.sockets.adapter.rooms['active-players']){
@@ -122,9 +71,6 @@ io.on('connection', (socket) => {
 
   socket.on('player-waiting', token => {
     socket.join('waiting-room');
-    //if(io.sockets.adapter.rooms['waiting-room']){
-    //  console.log('hay '+io.sockets.adapter.rooms['waiting-room'].length+' jugadores esperando');
-    //}
   });
 
   socket.on('game-in-progress', (callback) => {
@@ -146,23 +92,18 @@ io.on('connection', (socket) => {
     if(!io.sockets.adapter.rooms['waiting-room']){
       setTimeout(() => {
         gameInProgress = true;
-        console.log('gameInProgress: '+gameInProgress);
-        console.log('game started');
       },1000);
     }
     callback();
   });
   
   socket.on('done-waiting',(callback) => {
-    console.log('someone was waiting');
     socket.leave('waiting-room');
     socket.join('gaming-players');
     callback();
     if(!io.sockets.adapter.rooms['waiting-room']){
       setTimeout(() => {
         gameInProgress = true;
-        console.log('gameInProgress: '+gameInProgress);
-        console.log('game started');
       },1000);
     }
   });
@@ -190,10 +131,7 @@ io.on('connection', (socket) => {
 
     if(name !== ''){
       if(name[0] == randomLetter){
-
         if(peopleNames.isPersonName(name)){
-
-          console.log(name+' is a name');
 
           let count = 0;
 
@@ -207,14 +145,11 @@ io.on('connection', (socket) => {
 
           grade += 10 - count;
         }
-
       }
     }
     if(color !== ''){
       if(color[0] == randomLetter){
         if(colors.includes(color)){
-
-          console.log(color+' is a color');
 
           let count = 0;
 
@@ -235,8 +170,6 @@ io.on('connection', (socket) => {
       if(fruit[0] == randomLetter){
         fruits.forEach(existingFruit => {
           if(existingFruit == fruit){
-
-            console.log(fruit+' is a fruit');
             
             let count = 0;
     
@@ -289,13 +222,9 @@ io.on('connection', (socket) => {
       var interval = setInterval(() => {
         if(countdown >= 0){
           io.sockets.in('gaming-players').emit('countdown',countdown);
-          console.log(countdown);
           countdown--;
         }else{
           gameInProgress = false;
-          if(io.sockets.adapter.rooms['gaming-players']){
-            console.log(io.sockets.adapter.rooms['gaming-players']);
-          }
           io.sockets.in('gaming-players').emit('game-ended');
           if(io.sockets.adapter.rooms['gaming-players']){
             io.of('/').in('gaming-players').clients((error, socketIds) => {
@@ -306,8 +235,6 @@ io.on('connection', (socket) => {
             });
           }
           io.sockets.emit('game-has-finished',true);
-          console.log('game has finished');
-          console.log('gameInProgress: '+gameInProgress);
           clearInterval(interval);
         }
       },1000);
@@ -325,7 +252,6 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     socket.emit('remove-data','adiós');
 
-    // console.log('Socket '+socket.id+' disconnected');
     connectedClients--;
 
     io.sockets.emit('connected-clients',activePlayers);

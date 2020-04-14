@@ -14,10 +14,8 @@ export class CharacterSelection extends Component {
         this.props.socket.emit('select-animal',animal, (token, response) => {
             sessionStorage.setItem('animal',animal);
             this.token = token;
-            console.log(this.token);
             this.props.setToken(this.token);
 
-            console.log('connected clients: '+response.connectedClients);
             this.props.setConnectedClients(response.connectedClients);
 
             this.props.history.push('/wait');

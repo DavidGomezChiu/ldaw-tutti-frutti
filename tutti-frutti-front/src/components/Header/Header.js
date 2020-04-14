@@ -26,7 +26,6 @@ export class Header extends Component {
 
     setAnimal(){
         var animal = sessionStorage.getItem('animal');
-        console.log(animal);
         if(animal && animal !== ''){
             return <img className="animal-icon" alt={animal} src={process.env.PUBLIC_URL+'/assets/icons/'+animal+'.svg'}/>
         }

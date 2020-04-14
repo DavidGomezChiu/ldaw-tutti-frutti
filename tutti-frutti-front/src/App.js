@@ -67,16 +67,14 @@ export class App extends Component {
         this.setState(
             {
                 connectedClients: connectedClients
-            },() => {console.log(this.getConnectedClients());}
+            }
         );
     }
 
     componentDidMount(){
-        console.log('mount');
         this.removeToken();
         this.socket.on('remove-data', (message) => {
             this.removeToken();
-            console.log(message);
         });
     }
 

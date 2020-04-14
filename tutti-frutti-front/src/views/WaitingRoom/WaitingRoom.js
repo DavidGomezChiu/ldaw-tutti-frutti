@@ -33,7 +33,6 @@ export class WaitingRoom extends Component {
     }
 
     componentDidUpdate(){
-        console.log(this.state);
     }
 
     componentWillUnmount(){
@@ -43,12 +42,9 @@ export class WaitingRoom extends Component {
     determineMessage(){
         if(this._isMounted){
             if(this.state.connectedClients < 2){
-                console.log('menos de dos jugadores');
                 this.setState({message: 'Esperando más jugadores'});
             }else{
-                console.log('más de dos jugadores');
                 this.props.socket.emit('game-in-progress', (gameInProgress) => {
-                    console.log('game in progress: '+gameInProgress);
                     if(!gameInProgress){
                         this.goToGame();
                     }else{
@@ -57,7 +53,6 @@ export class WaitingRoom extends Component {
                                 message: 'Juego en progreso'
                             },
                             () => {
-                                console.log('esperando a que avisen');
                                 this.props.socket.on('game-has-finished', (gameHasFinished) => {
                                     this.setState({message: 'Listo!'});
                                     this.props.socket.emit('done-waiting', () => {
