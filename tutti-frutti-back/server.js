@@ -193,6 +193,8 @@ io.on('connection', (socket) => {
 
         if(peopleNames.isPersonName(name)){
 
+          console.log(name+' is a name');
+
           let count = 0;
 
           responesNames.forEach(nameInArray => {
@@ -212,6 +214,8 @@ io.on('connection', (socket) => {
       if(color[0] == randomLetter){
         if(colors.includes(color)){
 
+          console.log(color+' is a color');
+
           let count = 0;
 
           responesColors.forEach(colorInArray => {
@@ -229,19 +233,25 @@ io.on('connection', (socket) => {
     }
     if(fruit !== ''){
       if(fruit[0] == randomLetter){
-        
-        let count = 0;
+        fruits.forEach(existingFruit => {
+          if(existingFruit == fruit){
 
-        responesFruits.forEach(fruitInArray => {
-          if(fruitInArray == fruit){
-            count++;
+            console.log(fruit+' is a fruit');
+            
+            let count = 0;
+    
+            responesFruits.forEach(fruitInArray => {
+              if(fruitInArray == fruit){
+                count++;
+              }
+            });
+    
+            count--;
+    
+            grade += 10 - count;
+
           }
         });
-
-        count--;
-
-        grade += 10 - count;
-
       }
     }
     grades.push({token:token, grade:grade});

@@ -48,6 +48,17 @@ export class Game extends Component {
                         console.log('Mi calificación es: '+grade);
                         this.props.socket.emit('send-winners', winners => {
                             console.log(winners);
+                            var gameWon = false;
+                            winners.forEach(winner => {
+                                if(winner.token == sessionStorage.getItem('token')){
+                                    gameWon = true;
+                                }
+                            });
+                            if(gameWon){
+                                this.props.notify('You won! Contratulations!');
+                            }else{
+                                this.props.notify('You lost :( Try again?');
+                            }
                         });
                     });
                 }

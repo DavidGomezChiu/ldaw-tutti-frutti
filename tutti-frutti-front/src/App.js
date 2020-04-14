@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import {BrowserRouter, Route, Switch, Redirect} from 'react-router-dom';
 import './App.scss';
 import socketIOClient from 'socket.io-client';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // Views
 import CharacterSelection from './views/CharacterSelection/CharacterSelection';
@@ -78,16 +80,21 @@ export class App extends Component {
         });
     }
 
+    notify = (message) => {
+        toast(message, {containerId: 'result_toast'});
+    };
+
     render() {
         return (
             <div className="App">
+                <ToastContainer autoClose={8000} draggable={true} containerId={'result_toast'} position={toast.POSITION.BOTTOM_LEFT}></ToastContainer>
                 <BrowserRouter>
                     <div className="app-container">
                         <Header removeToken={this.removeToken} socket={this.socket} setConnectedClients={this.setConnectedClients}></Header>
                         <Switch>
                             <Route path="/" exact render={props => { return <CharacterSelection {...props} socket={this.socket} setToken={this.setToken} getToken={this.getToken} removeToken={this.removeToken} setConnectedClients={this.setConnectedClients}></CharacterSelection> }}></Route>
                             {this.hasToken() ?
-                                <Route path="/game" exact render={props => { return <Game {...props} socket={this.socket}></Game> }}></Route>
+                                <Route path="/game" exact render={props => { return <Game {...props} socket={this.socket} notify={this.notify}></Game> }}></Route>
                                 :
                                 <Redirect to='/'></Redirect>
                             }
