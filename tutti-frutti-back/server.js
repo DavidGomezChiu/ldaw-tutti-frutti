@@ -115,6 +115,7 @@ io.on('connection', (socket) => {
       socket.join('active-players');
     }
     let token = uuidv4();
+    sockets.push({token:token,animal:animal});
     io.sockets.emit('connected-clients',activePlayers);
     callback(token,{connectedClients:activePlayers});
   })
@@ -251,12 +252,21 @@ io.on('connection', (socket) => {
     let winners = [];
     let best = -1;
     grades.forEach(player => {
+      let playerAnimal = '';
+
+      sockets.forEach(s => {
+        if(s.token == player.token){
+          playerAnimal = s.animal;
+        }
+      });
+
       if (player.grade > best){
+        winners = [];
         best = player.grade;
-        winners.push(player.token);
+        winners.push({token:player.token,animal:playerAnimal});
       }else{
         if(player.grade == best){
-          winners.push(player.token)
+          winners.push({token:player.token,animal:playerAnimal})
         }
       }
     });
