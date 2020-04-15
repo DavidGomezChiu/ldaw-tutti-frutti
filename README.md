@@ -16,6 +16,8 @@ Para instalar las dependencias abre una consola en la carpeta principal y ejecut
 cd tutti-frutti-back && npm install && cd ../tutti-frutti-front && npm install
 ```
 
+Además deberás crear un archivo llamado ".env" en el subdirectorio tutti-frutti-back que contenga la información incluida en el archivo ".env.example" del mismo directorio.
+
 ## Ejecutar
 
 Para correr el proyecto necesitas dos terminales abiertas en la carpeta principal del proyecto.
